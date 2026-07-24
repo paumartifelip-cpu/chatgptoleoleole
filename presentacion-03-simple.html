@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>03 — Un cliente, diez contenidos · Paso a paso</title>
+  <style>
+    :root {
+      --bg: #212121;          /* fondo de ChatGPT */
+      --card: #2f2f2f;        /* tarjetas, como los mensajes de ChatGPT */
+      --line: #424242;
+      --ink: #ececec;
+      --muted: #b4b4b4;
+      --green: #10a37f;       /* verde ChatGPT */
+      --green-soft: rgba(16, 163, 127, .15);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 6vh 8vw;
+      gap: 3vh;
+    }
+    .slide.active { display: flex; animation: enter .4s ease; }
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .paso {
+      color: var(--green);
+      font-weight: 700;
+      font-size: clamp(14px, 1.6vw, 22px);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(34px, 5.5vw, 84px);
+      line-height: 1.05;
+      letter-spacing: -.03em;
+      max-width: 18ch;
+    }
+    h1 .em { color: var(--green); }
+
+    .texto {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(17px, 1.9vw, 28px);
+      line-height: 1.4;
+      max-width: 42ch;
+    }
+
+    .tarjeta {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 2.2vh 2.5vw;
+      max-width: 62ch;
+      font-size: clamp(15px, 1.6vw, 24px);
+      line-height: 1.45;
+      text-align: left;
+    }
+    .tarjeta b { color: var(--green); }
+
+    .lista {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.2vh 1vw;
+      max-width: 70vw;
+    }
+    .lista span {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: .6em 1.1em;
+      font-size: clamp(14px, 1.5vw, 22px);
+    }
+    .lista span::before { content: "✓ "; color: var(--green); font-weight: 700; }
+
+    .burbujas { display: flex; flex-direction: column; gap: 1.4vh; max-width: 60ch; width: 100%; }
+    .burbuja {
+      padding: 1.6vh 1.5vw;
+      border-radius: 14px;
+      font-size: clamp(15px, 1.6vw, 23px);
+      line-height: 1.4;
+      text-align: left;
+      max-width: 85%;
+    }
+    .burbuja.tu { align-self: flex-end; background: var(--green); color: #fff; }
+    .burbuja.ia { align-self: flex-start; background: var(--card); border: 1px solid var(--line); }
+
+    footer {
+      position: fixed;
+      bottom: 2.5vh;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5vw;
+      color: var(--muted);
+      font-size: clamp(12px, 1.1vw, 16px);
+    }
+    .dots { display: flex; gap: 7px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--line); transition: all .25s; }
+    .dot.active { background: var(--green); width: 22px; border-radius: 99px; }
+
+    .hint {
+      position: fixed;
+      top: 2.5vh;
+      left: 50%;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: clamp(11px, 1vw, 14px);
+      opacity: .7;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Portada -->
+  <section class="slide active">
+    <p class="paso">Clase 03 · ChatGPT aplicado a tu negocio</p>
+    <h1>Un cliente, <span class="em">diez contenidos</span></h1>
+    <p class="texto">Hoy vas a convertir la historia real de un solo cliente en contenido para varios días. Sin inventarte nada. Paso a paso.</p>
+  </section>
+
+  <!-- El problema -->
+  <section class="slide">
+    <p class="paso">El punto de partida</p>
+    <h1>“Sé que tengo que publicar, pero <span class="em">no sé qué contar</span>”</h1>
+    <p class="texto">Te sientas delante de Instagram y la cabeza se queda en blanco. La buena noticia: no necesitas inventar ideas. Ya tienes historias reales esperando.</p>
+  </section>
+
+  <!-- Lo que vamos a conseguir -->
+  <section class="slide">
+    <p class="paso">Lo que vamos a conseguir</p>
+    <h1>10 contenidos de <span class="em">una sola historia</span></h1>
+    <p class="texto">Al terminar tendrás diez contenidos creados a partir de la experiencia de un único cliente: su duda, su decisión, su resultado y su testimonio.</p>
+  </section>
+
+  <!-- Paso 1 -->
+  <section class="slide">
+    <p class="paso">Paso 1</p>
+    <h1>Elige una historia <span class="em">real</span></h1>
+    <p class="texto">Busca la experiencia completa de un cliente. Cuanto más completa, mejor.</p>
+    <div class="lista">
+      <span>Una conversación con el cliente</span>
+      <span>Su duda antes de contratar</span>
+      <span>Qué servicio eligió</span>
+      <span>Cómo fue su experiencia</span>
+      <span>El resultado conseguido</span>
+      <span>Su testimonio final</span>
+    </div>
+  </section>
+
+  <!-- Paso 2 -->
+  <section class="slide">
+    <p class="paso">Paso 2</p>
+    <h1>Borra los datos <span class="em">privados</span></h1>
+    <p class="texto">Igual que en la clase anterior: antes de pegar nada en ChatGPT, quita todo lo que identifique a la persona.</p>
+    <div class="tarjeta">✂️ Quita: nombres · teléfonos · direcciones · correos<br>✅ Deja: la historia tal y como pasó</div>
+  </section>
+
+  <!-- Paso 3 -->
+  <section class="slide">
+    <p class="paso">Paso 3</p>
+    <h1>Pega este <span class="em">encargo</span> en tu Proyecto</h1>
+    <div class="tarjeta">
+      Esta es una experiencia real de una clienta de mi negocio. Analízala y extrae:<br><br>
+      <b>1.</b> El problema que tenía antes de contratar.<br>
+      <b>2.</b> Sus dudas o miedos.<br>
+      <b>3.</b> Qué hizo que confiara en nosotros.<br>
+      <b>4.</b> La transformación que experimentó.<br>
+      <b>5.</b> Las frases más expresivas que utilizó.<br>
+      <b>6.</b> Las enseñanzas que podrían ayudar a otros.<br><br>
+      <b>No inventes información.</b> Si falta algún dato importante, pregúntamelo antes de continuar.
+    </div>
+  </section>
+
+  <!-- Paso 4 -->
+  <section class="slide">
+    <p class="paso">Paso 4</p>
+    <h1>Encuentra la <span class="em">historia</span></h1>
+    <p class="texto">Toda buena historia tiene las mismas partes. Pídele que la resuma así, y corrige lo que no sea fiel a lo que pasó de verdad.</p>
+    <div class="tarjeta">
+      ¿Cuál es la historia más interesante de esta experiencia? Resúmela así:<br><br>
+      <b>·</b> Situación inicial.<br>
+      <b>·</b> Preocupación o conflicto.<br>
+      <b>·</b> Decisión.<br>
+      <b>·</b> Experiencia.<br>
+      <b>·</b> Resultado.<br>
+      <b>·</b> Enseñanza final.
+    </div>
+  </section>
+
+  <!-- Paso 5 -->
+  <section class="slide">
+    <p class="paso">Paso 5</p>
+    <h1>Saca tres <span class="em">enfoques</span></h1>
+    <p class="texto">Una misma historia puede contarse de tres maneras, cada una con un objetivo distinto.</p>
+    <div class="tarjeta">
+      Convierte esta historia en tres enfoques de comunicación:<br><br>
+      <b>1.</b> Uno para conectar emocionalmente.<br>
+      <b>2.</b> Uno para enseñar algo útil.<br>
+      <b>3.</b> Uno para ayudar a contratar el servicio.<br><br>
+      Evita el tono publicitario y conserva la forma natural de expresarse de la clienta.
+    </div>
+  </section>
+
+  <!-- Paso 6 -->
+  <section class="slide">
+    <p class="paso">Paso 6</p>
+    <h1>Crea los <span class="em">diez contenidos</span></h1>
+    <div class="tarjeta">
+      Utilizando únicamente esta experiencia real, crea:<br><br>
+      <b>1.</b> Un guion de Reel de 30 segundos.<br>
+      <b>2.</b> Un segundo Reel educativo.<br>
+      <b>3.</b> Un carrusel de siete diapositivas.<br>
+      <b>4.</b> Una publicación breve de Instagram.<br>
+      <b>5.</b> Una secuencia de cuatro Stories.<br>
+      <b>6.</b> Un correo para clientes potenciales.<br>
+      <b>7.</b> Un mensaje de WhatsApp.<br>
+      <b>8.</b> Una respuesta para preguntas frecuentes.<br>
+      <b>9.</b> Un caso de éxito para la web.<br>
+      <b>10.</b> Una idea visual para acompañar la historia.<br><br>
+      <b>No repitas el mismo contenido. No inventes resultados ni emociones.</b> Indica qué objetivo cumple cada pieza.
+    </div>
+  </section>
+
+  <!-- Paso 7 -->
+  <section class="slide">
+    <p class="paso">Paso 7</p>
+    <h1>Mejora una pieza <span class="em">a mano</span></h1>
+    <p class="texto">No te quedes con lo primero que salga. Elige una pieza, por ejemplo el Reel, y púlela. Después léela en voz alta y da el último retoque tú.</p>
+    <div class="burbujas">
+      <div class="burbuja tu">Este guion todavía parece escrito por una empresa. Hazlo más humano y sencillo. Empieza con la duda exacta de la clienta. Elimina las frases que ella nunca diría. Máximo 30 segundos.</div>
+    </div>
+  </section>
+
+  <!-- Paso 8 -->
+  <section class="slide">
+    <p class="paso">Paso 8</p>
+    <h1>Guarda tu <span class="em">pack de contenidos</span></h1>
+    <div class="tarjeta">
+      Crea un documento llamado <b>“PACK DE CONTENIDOS — HISTORIA DE [TIPO DE CLIENTE]”</b> y ordena las piezas por objetivo:<br><br>
+      <b>·</b> Conectar.<br>
+      <b>·</b> Educar.<br>
+      <b>·</b> Resolver objeciones.<br>
+      <b>·</b> Vender.
+    </div>
+    <p class="texto">Guárdalo dentro del Proyecto. Ya tienes la semana resuelta.</p>
+  </section>
+
+  <!-- Tu turno -->
+  <section class="slide">
+    <p class="paso">Tu turno</p>
+    <h1>Pausa el vídeo. <span class="em">Hazlo con tu cliente</span></h1>
+    <div class="lista">
+      <span>Elige una historia real</span>
+      <span>Borra los datos privados</span>
+      <span>Extrae la historia con ChatGPT</span>
+      <span>Crea los diez contenidos</span>
+      <span>Mejora uno a mano y publícalo esta semana</span>
+    </div>
+  </section>
+
+  <!-- La idea final -->
+  <section class="slide">
+    <p class="paso">La idea final</p>
+    <h1>No necesitas inventar. Necesitas <span class="em">observar</span></h1>
+    <p class="texto">Esta clase no trata de “crear contenido con IA”. Trata de aprovechar mejor las historias reales que tu negocio ya tiene.</p>
+  </section>
+
+  <!-- Cierre -->
+  <section class="slide">
+    <p class="paso">Próximo capítulo</p>
+    <h1>Dicho y <span class="em">presupuestado</span></h1>
+    <p class="texto">Ya no tienes que sentarte delante de Instagram pensando qué publicar. Pero publicar no paga las facturas. ¿Qué pasa cuando alguien te escribe y te pide precio?</p>
+  </section>
+
+  <p class="hint">← → para avanzar · clic para pasar</p>
+
+  <footer>
+    <span id="num"></span>
+    <div class="dots" id="dots"></div>
+  </footer>
+
+  <script>
+    const slides = [...document.querySelectorAll('.slide')];
+    const dots = document.getElementById('dots');
+    const num = document.getElementById('num');
+    let i = 0;
+
+    slides.forEach(() => {
+      const d = document.createElement('span');
+      d.className = 'dot';
+      dots.appendChild(d);
+    });
+
+    function render(n) {
+      i = Math.max(0, Math.min(slides.length - 1, n));
+      slides.forEach((s, k) => s.classList.toggle('active', k === i));
+      [...dots.children].forEach((d, k) => d.classList.toggle('active', k === i));
+      num.textContent = (i + 1) + ' / ' + slides.length;
+    }
+
+    document.addEventListener('keydown', e => {
+      if (['ArrowRight', 'ArrowDown', ' ', 'PageDown'].includes(e.key)) { e.preventDefault(); render(i + 1); }
+      if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key)) { e.preventDefault(); render(i - 1); }
+      if (e.key === 'Home') render(0);
+      if (e.key === 'End') render(slides.length - 1);
+    });
+    document.addEventListener('click', e => render(e.clientX > innerWidth / 2 ? i + 1 : i - 1));
+
+    render(0);
+  </script>
+</body>
+</html>
